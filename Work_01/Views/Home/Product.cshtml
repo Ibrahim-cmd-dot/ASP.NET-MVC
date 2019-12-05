@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Work_01.Models.Product>
+@{
+    ViewBag.Title = "Product";
+}
+
+<h2>Products under category @ViewBag.CategoryName </h2>
+@foreach(var product in Model)
+{
+    <div class="row jumbotron">
+        <div class="col-xs-3">
+            <img class="img-rounded" src="@Url.Content("/Images/"+product.Picture)"
+               width="150" height="150"  alt="@product.ProductName"/>
+        </div>
+        <div class="col-xs-9">
+            <h4>@product.ProductName</h4>
+            <div>
+                <strong>Price: </strong>@product.Price.ToString("0.00") BDT
+            </div>
+            <div class="text-info">
+                @product.Description
+            </div>
+            <div class="text-right">
+                <a href="@Url.Action("Cart","Cart",new { id=product.ProductId})" class="btn btn-success"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Add To Cart</a>
+            </div>
+        </div>
+    </div>
+}
+<div class="text-right">
+    <nav>
+        <ul class="pagination">
+            @if (ViewBag.CurrentPage > 1)
+            {
+                <li>
+                    <a href="@Url.Action("Product","Home",new { id=ViewBag.CategoryID,page=ViewBag.CurrentPage-1},null)">&laquo;</a>
+                </li>
+            }
+            else
+            {
+                <li class="disabled"><a href="#">&laquo;</a></li>
+            }
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                if (i == ViewBag.CurrentPage)
+                {
+                    <li class="active">@Html.ActionLink(i.ToString(), "Product", "Home", new { id = ViewBag.CategoryID, page = i }, null)</li>
+                }
+                else
+                {
+                    <li>@Html.ActionLink(i.ToString(), "Product", "Home", new { id = ViewBag.CategoryID, Page = i }, null)</li>
+                }
+            }
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+            {
+                <li>
+                    <a href="@Url.Action("Product","Home",new { id=ViewBag.CategoryID,page=ViewBag.CurrentPage+1},null)">&raquo;</a>
+                </li>
+            }
+            else
+            {
+                <li class="disabled"><a href="#">&raquo;</a></li>
+            }
+        </ul>
+    </nav>
+</div>
+
+
